@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import uvicorn
 import os
@@ -157,14 +158,9 @@ class SessionAdvisor:
         notes = olfactory.get("notes", [])[:4]
         attrs = olfactory.get("attributes", {})
         evd_ids = olfactory.get("evidence_ids", [])
-        visibility = payload.get("public_visibility", {})
         commercial = payload.get("private_commercial_identity", {})
-        
-        if visibility.get("show_commercial_identity") is True:
-            title = f"الكود [{payload.get('public_display_code')}] - {commercial.get('perfume_name_canonical_candidate')}"
-        else:
-            title = f"الكود المعتمد: [{payload.get('public_display_code')}]"
-            
+        code = payload.get("public_display_code")
+
         dominant_traits = []
         if attrs.get("warmth", 0) >= 4:
             dominant_traits.append(f"دفء عالٍ ({attrs['warmth']}/5)")
@@ -179,7 +175,8 @@ class SessionAdvisor:
         notes_str = ", ".join(notes) if notes else "غير محددة"
         
         return {
-            "title": title,
+            "title": f"الكود المعتمد: [{code}]",
+            "public_display_code": code,
             "concentration": commercial.get("concentration"),
             "technical_justification": f"السمات الموثقة: {traits_str}",
             "primary_notes": notes_str,
@@ -233,6 +230,148 @@ class SessionAdvisor:
             self.build_grounded_justification(item) for item in top_3
         ]
         return response_data, self.session
+
+CHAT_PAGE = r"""<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>ANAS | مستشارك العطري</title>
+  <style>
+    :root { color-scheme: light; --ink: #233b32; --muted: #56685e; --line: #d5dacf; --paper: #f7f5ef; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Tahoma, Arial, sans-serif; line-height: 1.8; }
+    main { width: min(100%, 47rem); margin: auto; padding: clamp(14px, 4vw, 40px); }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--line); padding-bottom: .75rem; }
+    h1 { font-size: clamp(1.2rem, 4vw, 1.65rem); margin: 0; font-weight: 600; }
+    .wordmark { font: 600 1.6rem Georgia, serif; letter-spacing: .14em; }
+    #messages { display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; margin: 1.3rem 0; }
+    article { max-width: 92%; border: 1px solid var(--line); background: #fffefa; padding: .75rem 1rem; border-radius: 1rem .25rem 1rem 1rem; overflow-wrap: anywhere; }
+    article.user { align-self: flex-end; background: #e4ede3; border-color: #d0dbd0; border-radius: .25rem 1rem 1rem 1rem; }
+    article b { color: var(--muted); font-size: .8rem; }
+    article p { margin: .15rem 0 0; white-space: pre-wrap; }
+    ul { margin-block: .35rem 0; padding-inline-start: 1.4rem; }
+    form { border-top: 1px solid var(--line); padding-top: .8rem; }
+    label { display: block; font-weight: 600; margin-bottom: .3rem; }
+    textarea { display: block; width: 100%; padding: .8rem; background: #fffefa; border: 1px solid #aab8ae; border-radius: .65rem; resize: vertical; font: inherit; color: var(--ink); }
+    :focus-visible { outline: 3px solid #587358; outline-offset: 3px; }
+    .actions { display: flex; align-items: center; gap: 1rem; margin-top: .6rem; }
+    button { background: var(--ink); color: white; border: 0; border-radius: .55rem; padding: .5rem 1.4rem; min-height: 44px; font: inherit; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #status { color: var(--muted); font-size: .9rem; }
+    #status.error { color: #913b2c; }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>مستشارك العطري</h1><span class="wordmark" lang="en" dir="ltr">ANAS</span></header>
+    <section id="messages" role="log" aria-label="المحادثة" aria-live="polite">
+      <article><b>مستشار ANAS</b><p>ما الطابع العطري الذي تفضّله؟</p></article>
+    </section>
+    <form id="chat">
+      <label for="message">رسالتك</label>
+      <textarea id="message" rows="2" required placeholder="مثلاً، أحب العطور الزهرية"></textarea>
+      <div class="actions"><button type="submit">إرسال</button><span id="status" role="status"></span></div>
+    </form>
+    <noscript>فعّل JavaScript في المتصفح لإرسال الرسائل.</noscript>
+  </main>
+  <script>
+    const form = document.querySelector('#chat');
+    const input = document.querySelector('#message');
+    const button = form.querySelector('button');
+    const status = document.querySelector('#status');
+    const messages = document.querySelector('#messages');
+    const sessionId = Array.from(crypto.getRandomValues(new Uint8Array(16)),
+      byte => byte.toString(16).padStart(2, '0')).join('');
+
+    function addMessage(speaker, message, codes = []) {
+      const bubble = document.createElement('article');
+      bubble.className = speaker;
+      const label = document.createElement('b');
+      label.textContent = speaker === 'user' ? 'أنت' : 'مستشار ANAS';
+      const body = document.createElement('p');
+      body.textContent = message;
+      bubble.append(label, body);
+      if (codes.length) {
+        const list = document.createElement('ul');
+        for (const code of codes) {
+          const item = document.createElement('li');
+          const value = document.createElement('bdi');
+          value.textContent = code;
+          item.append('رمز العطر ', value);
+          list.append(item);
+        }
+        bubble.append(list);
+      }
+      messages.append(bubble);
+      return bubble;
+    }
+
+    function showReply(result) {
+      if (!result || !Array.isArray(result.recommendations)) throw new Error('invalid');
+      let message = result.clarification_question || result.message || '';
+      const codes = [...new Set(result.recommendations.map(item => item.public_display_code)
+        .filter(code => typeof code === 'string' && /^[0-9]{4}$/.test(code)))];
+      if (!message && codes.length) message = 'هذه الرموز التي اقترحها المحرك بناءً على رسائلك:';
+      if (!message) message = 'لا يتوفر اقتراح برمز صالح للعرض.';
+      if (result.invalidation_triggered) {
+        for (const list of messages.querySelectorAll('article ul')) {
+          const withdrawn = document.createElement('small');
+          withdrawn.textContent = 'سُحبت هذه الرموز بعد تعديل التفضيلات.';
+          list.replaceWith(withdrawn);
+        }
+        message = 'بعد تحديث تفضيلاتك، سُحبت الاقتراحات السابقة.\n' + message;
+      }
+      addMessage('advisor', message, codes);
+    }
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const message = input.value.trim();
+      if (!message || button.disabled) return;
+      button.disabled = true;
+      input.readOnly = true;
+      status.className = '';
+      status.textContent = 'بانتظار رد المحرك…';
+      const pending = addMessage('user', message);
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 120000);
+      try {
+        const response = await fetch('/api/v1/recommend', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({session_id: sessionId, message}),
+          signal: controller.signal
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        const data = await response.json();
+        if (data.session_id !== sessionId) throw new Error('invalid');
+        showReply(data.result);
+        input.value = '';
+        status.textContent = '';
+      } catch (error) {
+        pending.remove();
+        status.className = 'error';
+        status.textContent = error.message === '503'
+          ? 'الكتالوج غير متاح حاليًا. يمكنك إعادة إرسال رسالتك لاحقًا.'
+          : 'تعذّر استلام الرد. رسالتك محفوظة في الحقل للمحاولة مرة أخرى.';
+      } finally {
+        clearTimeout(timer);
+        input.readOnly = false;
+        button.disabled = false;
+        form.scrollIntoView({block: 'nearest'});
+      }
+    });
+  </script>
+</body>
+</html>"""
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def chat_page():
+    return CHAT_PAGE
+
 
 class QueryRequest(BaseModel):
     session_id: str
