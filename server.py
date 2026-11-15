@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import uvicorn
 import os
 import json
+import math
 import urllib.request
 import urllib.error
 from urllib.parse import urlsplit
@@ -23,6 +24,95 @@ HEADERS = {
 }
 
 CATALOG_CACHE = []
+
+# Public aliases extracted from the 125 ELIGIBLE records of the Founder-adopted v1.1 catalog.
+# Catalog SHA-256: ea1bd9165d42afee3d5fefe4df4c49592033eab5dd0fffcb85d8858b25a26afc
+APPROVED_PUBLIC_CODES = frozenset((
+    '0001 0002 0003 0004 0005 0006 0009 0010 0012 0013 0018 0022 '
+    '0023 0027 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 '
+    '0039 0040 0042 0043 0046 0047 0048 0050 0052 0053 0054 0055 '
+    '0056 0057 0059 0061 0062 0065 0068 0071 0075 0079 0080 0081 '
+    '0083 0084 0085 0086 0087 0091 0093 0094 0096 0097 0098 0099 '
+    '0100 0101 0102 0103 0104 0105 0106 0107 0108 0109 0110 0111 '
+    '0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 '
+    '0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 '
+    '0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 '
+    '0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 '
+    '0160 0161 0162 0163 0164 '
+).split())
+
+
+def recommendation_fields(payload):
+    # Compare only the data consumed by filtering, scoring, and the existing public response.
+    commercial = payload.get("private_commercial_identity", {})
+    olfactory = payload.get("olfactory_profile", {})
+    if not isinstance(commercial, dict) or not isinstance(olfactory, dict):
+        return None
+    concentration = commercial.get("concentration", "")
+    families = olfactory.get("families", [])
+    notes = olfactory.get("notes", [])
+    evidence = olfactory.get("evidence_ids", [])
+    attrs = olfactory.get("attributes", {})
+    if not isinstance(concentration, str) or not isinstance(attrs, dict):
+        return None
+    for items in (families, notes, evidence):
+        if not isinstance(items, list) or not all(isinstance(v, str) for v in items):
+            return None
+    scores = tuple(attrs.get(k, 0) for k in ("warmth", "freshness", "woody", "spicy", "sweetness"))
+    if not all(type(s) is int or (type(s) is float and math.isfinite(s)) for s in scores):
+        return None
+    return concentration, frozenset(families), tuple(notes[:4]), tuple(evidence), scores
+
+
+def match_catalog_points(points):
+    by_code = {}
+    fields_by_code = {}
+    disputed = set()
+    observed = set()
+    unlisted_points = 0
+    invalid_codes = 0
+    ineligible_points = 0
+    eligible_counts = {}
+    for point in points:
+        payload = point.get("payload") if isinstance(point, dict) else None
+        code = payload.get("public_display_code") if isinstance(payload, dict) else None
+        if not isinstance(code, str) or not code.isascii() or not code.isdecimal() or len(code) != 4:
+            invalid_codes += 1
+            continue
+        if code not in APPROVED_PUBLIC_CODES:
+            unlisted_points += 1
+            continue
+        observed.add(code)
+        if payload.get("eligibility_state") != "ELIGIBLE":
+            ineligible_points += 1
+            continue
+        eligible_counts[code] = eligible_counts.get(code, 0) + 1
+        # All 125 protected internal IDs follow this binding in the pinned catalog.
+        if "internal_id" in payload and payload["internal_id"] != "ANAS-PERF-" + code.zfill(6):
+            disputed.add(code)
+            continue
+        fields = recommendation_fields(payload)
+        if fields is None:
+            disputed.add(code)
+            continue
+        if code not in by_code:
+            by_code[code] = point
+            fields_by_code[code] = fields
+        elif fields != fields_by_code[code]:
+            disputed.add(code)
+    accepted = [point for code, point in by_code.items() if code not in disputed]
+    counts = {
+        "retrieved_points": len(points),
+        "observed_approved_codes": len(observed),
+        "missing_approved_codes": len(APPROVED_PUBLIC_CODES - observed),
+        "invalid_code_points": invalid_codes,
+        "unlisted_points": unlisted_points,
+        "ineligible_points": ineligible_points,
+        "codes_with_multiple_eligible_points": sum(n > 1 for n in eligible_counts.values()),
+        "disputed_codes": sorted(disputed),
+        "admitted_unique_codes": len(accepted),
+    }
+    return accepted, counts
 
 def catalog_error(exc):
     if isinstance(exc, urllib.error.HTTPError):
@@ -61,13 +151,14 @@ def fetch_all_perfumes():
     print("ANAS_QDRANT_CONFIG", json.dumps(settings), flush=True)
     all_points = []
     offset = None
+    seen_offsets = set()
     while True:
         body = {
             "limit": 15,
             "with_payload": True,
             "with_vectors": False
         }
-        if offset:
+        if offset is not None:
             body["offset"] = offset
         
         success = False
@@ -97,13 +188,17 @@ def fetch_all_perfumes():
                     print(f"ANAS_QDRANT_READ failure={catalog_error(exc)} loaded_points={len(all_points)}", flush=True)
                 time.sleep(1)
                 
-        if not success or not points:
-            break
+        if not success:
+            return []  # A partial scan could hide a conflicting duplicate on a later page.
             
         all_points.extend(points)
         offset = result.get("next_page_offset")
-        if not offset:
+        if offset is None:
             break
+        if not points or not isinstance(offset, (int, str)) or offset in seen_offsets:
+            print("ANAS_QDRANT_READ failure=invalid_pagination", flush=True)
+            return []
+        seen_offsets.add(offset)
             
     return all_points
 
@@ -111,8 +206,10 @@ def fetch_all_perfumes():
 async def lifespan(app: FastAPI):
     global CATALOG_CACHE
     print("🔄 جاري تحميل الكتالوج إلى ذاكرة الخادم السحابي...")
-    CATALOG_CACHE = fetch_all_perfumes()
-    print(f"ANAS_CATALOG loaded_points={len(CATALOG_CACHE)}", flush=True)
+    points = fetch_all_perfumes()
+    CATALOG_CACHE, counts = match_catalog_points(points)
+    print(f"ANAS_CATALOG loaded_points={len(points)}", flush=True)
+    print("ANAS_CATALOG_MATCH", json.dumps(counts), flush=True)
     yield
 
 app = FastAPI(
@@ -322,6 +419,7 @@ CHAT_PAGE = r"""<!doctype html>
     <noscript>فعّل JavaScript في المتصفح لإرسال الرسائل.</noscript>
   </main>
   <script>
+    const approvedCodes = new Set(__APPROVED_PUBLIC_CODES__);
     const form = document.querySelector('#chat');
     const input = document.querySelector('#message');
     const button = form.querySelector('button');
@@ -357,7 +455,7 @@ CHAT_PAGE = r"""<!doctype html>
       if (!result || !Array.isArray(result.recommendations)) throw new Error('invalid');
       let message = result.clarification_question || result.message || '';
       const codes = [...new Set(result.recommendations.map(item => item.public_display_code)
-        .filter(code => typeof code === 'string' && /^[0-9]{4}$/.test(code)))];
+        .filter(code => approvedCodes.has(code)))];
       if (!message && codes.length) message = 'هذه الرموز التي اقترحها المحرك بناءً على رسائلك:';
       if (!message) message = 'لا يتوفر اقتراح برمز صالح للعرض.';
       if (result.invalidation_triggered) {
@@ -410,7 +508,7 @@ CHAT_PAGE = r"""<!doctype html>
     });
   </script>
 </body>
-</html>"""
+</html>""".replace("__APPROVED_PUBLIC_CODES__", json.dumps(sorted(APPROVED_PUBLIC_CODES)))
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
