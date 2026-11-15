@@ -19,7 +19,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
-RELEASE = "ANAS-G-documentary-journey-1"
+RELEASE = "ANAS-G-catalog-guide-2"
 COLLECTION_NAME = "anas_perfume_catalog_v1_1_multilingual_e5_small_384"
 DEFAULT_QDRANT_URL = "https://e1b44e0a-3fd9-48b2-b529-a9dcd260c23a.ca-central-1-0.aws.cloud.qdrant.io"
 CATALOG_SHA256 = "ea1bd9165d42afee3d5fefe4df4c49592033eab5dd0fffcb85d8858b25a26afc"
@@ -290,6 +290,135 @@ REVIEWED_ROWS = json.loads(r'''[
 ]''')
 
 
+REGISTRY = json.loads(r'''{
+"0001":{"audience":null,"families":["woody","spicy"],"family_contexts":[{"ref":"e_fb449db7f1a42a2b8652a4ccae76172f","source_ref":"s_3c14dfd03f7a89c042af5041c21524aa","uses":["use:evenings_date_nights_autumn_winter"],"value":"use:evenings_date_nights_autumn_winter","version_ref":"v_864ed19ca46f712f7941b2d3b8903ddd"}]},
+"0002":{"audience":null,"families":["fresh floral"]},
+"0003":{"audience":"men","families":["woody","ambery","aromatic"],"family_contexts":[{"ref":"e_73e521e06c9e9b758f9029ee6bd0112f","source_ref":"s_5f779f8cb45b33f2de3410dd39dbe99f","uses":["use:evening","use:evenings_after_work_rooftop_dates_nights_out"],"value":"use:evenings_after_work_rooftop_dates_nights_out","version_ref":"v_3347b97f2cc01fbb1854e28069bef36f"}]},
+"0004":{"audience":"men","families":["fresh","woody"]},
+"0005":{"audience":null,"families":["floral"]},
+"0006":{"audience":null,"families":["ambery","floral"]},
+"0009":{"audience":null,"families":["earthy","woody","citrus"]},
+"0010":{"audience":null,"families":["dry woods","fresh","citrus","fruity"]},
+"0012":{"audience":null,"families":["oriental","oud","rose"]},
+"0013":{"audience":null,"families":["floral amber"]},
+"0018":{"audience":null,"families":["ambery","floral","woody"]},
+"0022":{"audience":null,"families":["floral","fruity","musky"]},
+"0023":{"audience":"men","families":["woody","spicy"]},
+"0027":{"audience":"men","families":[]},
+"0029":{"audience":null,"families":["floral","spicy","gourmand"]},
+"0030":{"audience":null,"families":["floral","sparkling"]},
+"0031":{"audience":null,"families":["floral","fruity"]},
+"0032":{"audience":null,"families":["citrus","aquatic","woody"]},
+"0033":{"audience":null,"families":[]},
+"0034":{"audience":null,"families":["amber","floral"]},
+"0035":{"audience":null,"families":["ambery","fresh","woody"]},
+"0036":{"audience":null,"families":[]},
+"0037":{"audience":"men","families":["woody","spicy"]},
+"0038":{"audience":"men","families":["ambery","woody"]},
+"0039":{"audience":null,"families":["floral"]},
+"0040":{"audience":null,"families":["floral","fresh","fruity"]},
+"0042":{"audience":null,"families":["woody"]},
+"0043":{"audience":null,"families":["oriental"]},
+"0046":{"audience":"women","families":["chypre","musk"]},
+"0047":{"audience":null,"families":["floral"]},
+"0048":{"audience":null,"families":["woody","aromatic"]},
+"0050":{"audience":null,"families":["chypre","floral","woody"]},
+"0052":{"audience":"men","families":[]},
+"0053":{"audience":null,"families":["aquatic","woody"]},
+"0054":{"audience":null,"families":["floral","solar"]},
+"0055":{"audience":null,"families":["floral","woody","musky"]},
+"0056":{"audience":null,"families":["aromatic","leathery","fougere"]},
+"0057":{"audience":null,"families":["fougere","aromatic"]},
+"0059":{"audience":"men","families":["fresh","woody"]},
+"0061":{"audience":null,"families":["floral","gourmand"]},
+"0062":{"audience":null,"families":["fresh","fougere"]},
+"0065":{"audience":null,"families":["floral","fruity","woody"]},
+"0068":{"audience":null,"families":["floral","aldehydic"]},
+"0071":{"audience":null,"families":["woody","floral"]},
+"0075":{"audience":null,"families":["floral"]},
+"0079":{"audience":null,"families":["ambery","floral"]},
+"0080":{"audience":null,"families":["floral","gourmand"]},
+"0081":{"audience":null,"families":["floral","gourmand"]},
+"0083":{"audience":null,"families":["spicy","fresh","woody"]},
+"0084":{"audience":null,"families":["fresh","citrus","fruity","woody"]},
+"0085":{"audience":"men","families":["oriental","woody"]},
+"0086":{"audience":null,"families":["oriental","woody"]},
+"0087":{"audience":null,"families":["woody","spicy"]},
+"0091":{"audience":null,"families":["leathery"]},
+"0093":{"audience":null,"families":["floral","aromatic"]},
+"0094":{"audience":null,"families":["floral","amber","sweet"]},
+"0096":{"audience":null,"families":["amber","spicy","gourmand"]},
+"0097":{"audience":null,"families":["woody","amber"]},
+"0098":{"audience":null,"families":["amber","woody"]},
+"0099":{"audience":null,"families":[]},
+"0100":{"audience":null,"families":[]},
+"0101":{"audience":null,"families":["floral","chypre"]},
+"0102":{"audience":null,"families":["floral","leathery"]},
+"0103":{"audience":null,"families":[]},
+"0104":{"audience":null,"families":[]},
+"0105":{"audience":null,"families":[]},
+"0106":{"audience":null,"families":["musky","leathery"]},
+"0107":{"audience":null,"families":["floral","musky"]},
+"0108":{"audience":null,"families":["floral","musky"]},
+"0109":{"audience":null,"families":["amber","woody","vanilla"]},
+"0110":{"audience":"women","families":["floral"]},
+"0111":{"audience":null,"families":["amber","floral"]},
+"0112":{"audience":null,"families":["amber","aromatic"]},
+"0113":{"audience":null,"families":[]},
+"0114":{"audience":null,"families":["floral","amber"]},
+"0115":{"audience":null,"families":[]},
+"0116":{"audience":null,"families":[]},
+"0117":{"audience":null,"families":[]},
+"0118":{"audience":null,"families":[]},
+"0119":{"audience":null,"families":[]},
+"0120":{"audience":null,"families":[]},
+"0121":{"audience":null,"families":[]},
+"0122":{"audience":null,"families":[]},
+"0123":{"audience":null,"families":["fresh","marine","floral","musky"]},
+"0124":{"audience":null,"families":["amber","floral","white floral","solar","woody"]},
+"0125":{"audience":null,"families":["floral","white floral","vanilla","leather","woody"]},
+"0126":{"audience":null,"families":["amber","woody","gourmand","powdery"]},
+"0127":{"audience":null,"families":["fresh","citrus","floral","warm"]},
+"0128":{"audience":null,"families":["floral"]},
+"0129":{"audience":null,"families":["woody"]},
+"0130":{"audience":null,"families":["woody"]},
+"0131":{"audience":null,"families":["woody"]},
+"0132":{"audience":null,"families":["aromatic foug\u00e8re","green","mossy woods"]},
+"0133":{"audience":null,"families":["woody","oud","spicy"]},
+"0134":{"audience":"men","families":["fresh","woody","spicy","ambery"]},
+"0135":{"audience":null,"families":["citrus","floral","woody"]},
+"0136":{"audience":null,"families":["fresh","woody","leathery","floral"]},
+"0137":{"audience":null,"families":["woody","oud","aromatic","spicy","musky"]},
+"0138":{"audience":"men","families":["fresh","woody","aromatic","floral","ambery"]},
+"0139":{"audience":null,"families":["woody","ambery","floral"]},
+"0140":{"audience":null,"families":["musky","ambery","woody"]},
+"0141":{"audience":null,"families":["aromatic","woody","spicy","musky"]},
+"0142":{"audience":null,"families":["ambery","woody","spicy","gourmand"]},
+"0143":{"audience":null,"families":["floral","ambery","woody","oud"]},
+"0144":{"audience":null,"families":["ambery","aromatic","vanilla","gourmand"]},
+"0145":{"audience":null,"families":["ambery","spicy","floral","woody"]},
+"0146":{"audience":null,"families":["floral","fruity","ambery"]},
+"0147":{"audience":null,"families":["fougere","citrus","ambery"]},
+"0148":{"audience":null,"families":["woody","spicy","leathery"]},
+"0149":{"audience":null,"families":["woody","green","citrus"]},
+"0150":{"audience":null,"families":["woody","spicy","leathery","oud","gourmand"]},
+"0151":{"audience":null,"families":["woody","spicy","gourmand"]},
+"0152":{"audience":null,"families":["woody","spicy","gourmand"]},
+"0153":{"audience":null,"families":["fougere","ambery","fruity"]},
+"0154":{"audience":null,"families":["fougere","ambery","leathery"]},
+"0155":{"audience":null,"families":["ambery","spicy","gourmand"]},
+"0156":{"audience":null,"families":["floral","fruity","gourmand"]},
+"0157":{"audience":null,"families":["fougere","ambery","powdery"]},
+"0158":{"audience":null,"families":["fougere","ambery","leathery"]},
+"0159":{"audience":null,"families":["fougere","aromatic","powdery"]},
+"0160":{"audience":null,"families":["woody","citrus","aromatic"]},
+"0161":{"audience":"men","families":["fougere","aromatic","woody"]},
+"0162":{"audience":null,"families":["woody","citrus","spicy"]},
+"0163":{"audience":null,"families":["woody","ambery","spicy"]},
+"0164":{"audience":null,"families":["floral","ambery","woody","musky"]}
+}''')
+
+
 POINT_OWNER = {pid: (code, role, checksum)
                for code, pair in POINT_REFERENCE.items()
                for role, (pid, checksum) in zip(("record", "index"), pair)}
@@ -405,6 +534,204 @@ async def lifespan(app):
 app = FastAPI(title="ANAS", version=RELEASE, lifespan=lifespan)
 
 
+# Customer-facing labels. Material identifiers and private product identities stay off the page.
+NOTE_AR = dict(line.split("|",1) for line in """african marigold|القطيفة الأفريقية
+agarwood|خشب العود
+almond|اللوز
+ambar wood|خشب عنبري
+amber|العنبر
+amber patchouli|عنبر وباتشولي
+ambergris|العنبر الرمادي
+amberwood|الخشب العنبري
+ambrette|بذور الأمبريت
+angelica|حشيشة الملاك
+anise|اليانسون
+apple|التفاح
+aquatic flowers|الزهور المائية
+basil|الريحان
+benzoin|الجاوي
+bergamot|البرغموت
+birch|البتولا
+black leather accord|أكورد الجلد الأسود
+black tea|الشاي الأسود
+black vanilla|الفانيليا السوداء
+blackcurrant|الكشمش الأسود
+blood orange|البرتقال الأحمر
+caramel|الكراميل
+cardamom|الهيل
+cedarwood|خشب الأرز
+chantilly|كريمة شانتيه
+cherry accord|أكورد الكرز
+cinnamon|القرفة
+clary sage|المريمية المتصلبة
+coconut|جوز الهند
+coriander|الكزبرة
+cumin|الكمون
+cyclamen|بخور مريم
+cypress|السرو
+cypriol|السعد
+damascena rose|الورد الدمشقي
+dark chocolate|الشوكولاتة الداكنة
+dark woods|الأخشاب الداكنة
+davana|الدافانا
+elemi|راتنج الإليمي
+fig|التين
+fir balsam|بلسم التنوب
+frankincense|اللبان
+freesia|الفريزيا
+gaiac wood|خشب الغاياك
+galbanum|الجلبانوم
+gardenia|الغاردينيا
+geranium|إبرة الراعي
+ginger|الزنجبيل
+golden amber accord|أكورد العنبر الذهبي
+grapefruit|الجريب فروت
+grapefruit-quince accord|أكورد الجريب فروت والسفرجل
+griotte syrup|شراب الكرز الحامض
+haiti vetyver|نجيل الهند الهايتي
+hazelnut|البندق
+heliotrope|الهليوتروب
+honey|العسل
+honeysuckle|زهرة العسل
+incense|البخور
+incense accord|أكورد البخور
+indian tuberose|مسك الروم الهندي
+iris|السوسن
+iris accord|أكورد السوسن
+jasmine|الياسمين
+jasmine sambac|ياسمين السامباك
+kingwood|خشب الكينغوود
+labdanum|اللابدانوم
+lavandin|اللافاندين
+lavender|اللافندر
+leather|الجلد
+leather accord|أكورد الجلد
+lemon|الليمون
+lily of the valley|زنبق الوادي
+magnolia|الماغنوليا
+mahogany|الماهوجني
+mandarin|اليوسفي
+marine accord|أكورد بحري
+marshmallow|المارشميلو
+mint|النعناع
+musk|المسك
+myrrh|المر
+naseberry|السابوديلا
+neroli|النيرولي
+nutmeg|جوزة الطيب
+oakmoss|طحلب البلوط
+orange|البرتقال
+orange blossom|زهر البرتقال
+oregano|الأوريغانو
+osmanthus|الأوسمانثوس
+oud|العود
+papaya|البابايا
+patchouli|الباتشولي
+peach|الخوخ
+pear|الكمثرى
+peony|الفاوانيا
+pepper|الفلفل
+petitgrain|أوراق وأغصان النارنج
+pimento|البهار الإفرنجي
+pine|الصنوبر
+pine needle|إبر الصنوبر
+pineapple|الأناناس
+pink pepper|الفلفل الوردي
+plum accord|أكورد البرقوق
+pomegranate|الرمان
+praline|البرالين
+raspberry|توت العليق
+rose|الورد
+rose bouquet accord|أكورد باقة الورد
+rose de mai|ورد مايو
+rosemary|إكليل الجبل
+saffron|الزعفران
+saffron accord|أكورد الزعفران
+sage|المريمية
+salted accord|أكورد ملحي
+sambac jasmine|ياسمين سامباك
+sandalwood|خشب الصندل
+sichuan pepper|فلفل سيتشوان
+star anise accord|أكورد اليانسون النجمي
+suede|الشمواه
+tea|الشاي
+thyme|الزعتر
+tobacco|التبغ
+tonka bean|حبوب التونكا
+tuberose|مسك الروم
+turkish rose|الورد التركي
+vanilla|الفانيليا
+verbena|اللويزة
+vetiver|نجيل الهند
+violet|البنفسج
+violet accord|أكورد البنفسج
+violet leaves|أوراق البنفسج
+watermelon|البطيخ
+white leather accord|أكورد الجلد الأبيض
+white musk|المسك الأبيض
+white musks|المسك الأبيض المتعدد
+wood|الأخشاب
+ylang-ylang|الإيلنغ
+yuzu|اليوزو""".splitlines())
+
+FAMILY_AR = dict(line.split("|") for line in """woody|خشبي
+floral|زهري
+ambery|عنبري
+amber|عنبر
+spicy|متبّل
+aromatic|عشبي عطري
+fresh|منعش
+gourmand|غورمان
+citrus|حمضي
+musky|مسكي
+fougere|فوجير
+fruity|فاكهي
+leathery|جلدي
+oud|عودي
+oriental|شرقي
+chypre|شيبر
+vanilla|فانيلي
+powdery|بودري
+aquatic|مائي
+solar|شمسي
+white floral|زهور بيضاء
+green|أخضر
+fresh floral|زهري منعش
+earthy|ترابي
+dry woods|أخشاب جافة
+rose|وردي
+floral amber|زهري عنبري
+sparkling|فوّار
+musk|طابع المسك
+aldehydic|ألدهيدي
+sweet|حلو
+marine|بحري
+leather|طابع الجلد
+warm|دافئ
+aromatic fougère|فوجير عطري
+mossy woods|أخشاب طحلبية""".splitlines())
+AUDIENCES = {'men':'رجالي','women':'نسائي','unisex':'للجنسين'}
+CHANNELS = {'manufacturer_authored_content':'المصنّع','professional_editorial':'مرجع تحريري متخصص',
+            'retailer_editorial':'تحرير بائع','brand_regional_store_editorial':'تحرير متجر العلامة الإقليمي',
+            'secondary_aggregator':'مرجع تجميعي ثانوي'}
+CONTEXT_AR = dict(line.split('|') for line in """use:evenings_after_work_rooftop_dates_nights_out|الأمسيات والخروج بعد العمل والمواعيد والسهر
+use:date_night_editorial|موعد مسائي
+use:evening_or_more_formal_occasions|المساء أو المناسبات الرسمية
+use:cool_evenings_weekends_casual_seller_editorial|الأمسيات الباردة وعطلات نهاية الأسبوع والاستعمال غير الرسمي
+use:daily_office_casual_warm_weather|الاستعمال اليومي والمكتب والأيام غير الرسمية والطقس الدافئ
+use:evening_editorial_selection|اختيار تحريري للمساء
+use:spring_summer_also_year_round|الربيع والصيف مع ذكر الاستعمال على مدار السنة
+use:romantic_evening|أمسية رومانسية
+use:fall_winter_evening_cooler_with_office_summer_caution|المساء والخريف والشتاء والجو البارد، مع تحفّظ المصدر على المكتب والصيف
+use:winter_chilly_nights_close_encounters|الشتاء والليالي الباردة واللقاءات القريبة
+use:special_occasion_editorial|مناسبة خاصة
+use:day_night_everyday_evenings_special_occasions|النهار والليل والاستعمال اليومي والأمسيات والمناسبات الخاصة
+use:workdays_weekends_nights_out_bold_impression|أيام العمل وعطلات نهاية الأسبوع والخروج ليلًا وإبراز الحضور
+use:wedding_groom_confidence|العريس يوم زفافه مع ذكر الثقة""".splitlines())
+CONCENTRATIONS={'EDT':'أو دو تواليت','EDP':'أو دو بارفان','Extrait':'خلاصة عطرية','Parfum':'بارفان',
+  'Elixir':'إكسير','Eau de Parfum for Women':'أو دو بارفان','Eau de Parfum Intense':'أو دو بارفان إنتنس'}
+
+
 # A small, closed Arabic grammar. Every word must be consumed before an interpretation
 # can be confirmed. A later unrecognised clause puts the entire selection on hold.
 def normalize(text):
@@ -442,14 +769,41 @@ CONTEXTS = {
         "للنهار والطقس الدافئ والرياضة والمكتب والاستخدام اليومي في الربيع والصيف"),
     "use:wedding_groom": ("استخدام العريس في الزفاف", "للعريس في الزفاف"),
 }
+for slug, arabic in NOTE_AR.items():
+    if slug not in NOTES:
+        NOTES[slug] = (arabic, arabic.removeprefix('ال'))
+for key, arabic in CONTEXT_AR.items():
+    CONTEXTS.setdefault(key, (arabic,))
 LABELS = {"note:" + slug: spec[0] for slug, spec in NOTES.items()}
 LABELS.update({slug: spec[0] for slug, spec in CONTEXTS.items()})
 TERMS = {normalize(alias): ("note:" + slug) for slug, spec in NOTES.items() for alias in spec}
 TERMS.update({normalize(alias): slug for slug, spec in CONTEXTS.items() for alias in spec})
+for key, options in {
+    'audience:men': ('رجالي','رجاليا','رجاليه','رجالية','للرجال','رجل','للرجل','for men','men'),
+    'audience:women': ('نسائي','نسائيا','نسائيه','نسائية','للنساء','للمرأة','للنساء فقط','حريمي','women'),
+    'audience:unisex': ('للجنسين','مشترك','للرجال والنساء','يونيسكس','unisex'),
+    'use:day': ('بالصباح','الصباح','للصباح','في الصباح','للنهار','نهاراً'),
+    'use:evening': ('المساء','بالليل','في الليل','لليل','ليلي','ليلا'),
+    'use:office': ('الدوام','للدوام','في الدوام','للمكتب','المكتب','للشغل'),
+    'use:daily': ('كل يوم','للاستخدام اليومي','يومي','يوميا','يومية'),
+    'use:occasion': ('للمناسبات','مناسبة','مناسبات','لمناسبة خاصة'),
+    'use:summer': ('للصيف','صيفي','في الصيف'), 'use:winter': ('للشتاء','شتوي','في الشتاء'),
+}.items():
+    for word in options: TERMS[normalize(word)] = key
+LABELS.update({'audience:'+key:val for key,val in AUDIENCES.items()})
+LABELS.update({'use:daily':'الاستخدام اليومي','use:occasion':'المناسبات','use:summer':'الصيف','use:winter':'الشتاء'})
+for slug, arabic in FAMILY_AR.items():
+    k='family:'+slug
+    LABELS[k]='طابع '+arabic
+    for wording in ('طابع '+arabic,'بطابع '+arabic,arabic):
+        TERMS.setdefault(normalize(wording),k)
+for word,slug in {'خشبية':'woody','حمضيات':'citrus','حمضية':'citrus','منعشة':'fresh','زهور':'floral','زهرية':'floral','سكّري':'sweet','حلوة':'sweet'}.items():
+    TERMS[normalize(word)]='family:'+slug
 TERMS = dict(sorted(TERMS.items(), key=lambda item: -len(item[0])))
 # Filler is deliberately restricted to phrases with no additional material meaning.
-PREFIX = re.compile(r"(?:(?:اريد|اريده|احب|افضل|ابي|ابغي|ابغى|عايز|احتاج|اطلب|اشترط|لنفسى|لنفسي|عطرا|عطر|رائحه|رائحة|برائحة|برائحه|بنوتة|نوتة|نوتات|فيه|للاستخدام|لاستخدامه|استعمله|استخدمه|واستخدمه|واستعمله|واشترط|واريد|واحب|وافضل|من فضلك|لو سمحت|وايضا|ايضا|مع|و)(?=\s|$)\s*)+")
-AVOID = re.compile(r"(?:بدون|من دون|لا احب|ما احب|اتجنب|من غير|لا اريد|ما اريد)\s+")
+PREFIX = re.compile(r"(?:(?:السلام عليكم|مرحبا|يا ريت|لو تكرمت|ممكن تقترح لي|ممكن ترشح لي|عايز لي|رشحلي|عايزه|عاوزة|عايزة|ابحث عن|ادور علي|ابحث|ممكن|احتاج الي|محتاج|ترشح لي|رشح لي|رشحلي|عاوز|بدي|بغيت|انا|لي|عطور|عطره|يكون|يكون فيه|اريد|اريده|احب|افضل|ابي|ابغي|ابغى|عايز|احتاج|اطلب|اشترط|لنفسى|لنفسي|عطرا|عطر|رائحه|رائحة|برائحة|برائحه|بنوتة|نوتة|نوتات|فيه|للاستخدام|لاستخدامه|استعمله|استخدمه|واستخدمه|واستعمله|واشترط|واريد|واحب|وافضل|من فضلك|لو سمحت|وايضا|ايضا|مع|و)(?=\s|$)\s*)+")
+GENERAL = {normalize(x) for x in ("أريد عطراً","أريد عطر","عطر","عطور","ابحث عن عطر","أريد توصية","رشح لي عطر","ممكن تساعدني","مرحبا","السلام عليكم","هلا","ما بعرف","لا أعرف","ساعدني أختار","ما عندي تفضيل")}
+AVOID = re.compile(r"(?:بدون|بلا|من دون|لا احب|ما احب|ما بحب|اتجنب|من غير|لا اريد|ما اريد)\s+")
 HOURS = re.compile(r"(?:ثبات(?:ه)?|يثبت|يدوم)\s+(?:(?:لمدة|ل)\s*)?(ست|ستة|\d{1,2})\s*ساعات?(?=$|\s)")
 CONFIRM = {"تاكيد", "تاكيد التفضيلات", "اكد تفضيلاتي"}
 RESET = {"بداية جديدة", "من جديد", "ابدا من جديد", "اعادة البدء", "ابدأ من جديد"}
@@ -489,8 +843,42 @@ def label(condition):
     value = "ثبات لمدة " + key.split(":")[1] + " ساعات" if key.startswith("duration_hours:") else LABELS[key]
     return ("تجنّب " if polarity == "negative" else "") + value
 
+def catalog_filters_match(code, conditions):
+    record=REGISTRY[code]
+    for key, polarity in conditions:
+        kind, value = key.split(':',1)
+        if kind == 'audience':
+            if polarity != 'positive' or record['audience'] != value:
+                return False
+        if kind == 'family' and (polarity != 'positive' or value not in record['families']):
+            return False
+    return True
+
+def catalog_family_support(row, conditions):
+    # Join verified family metadata to advice on the exact official product page.
+    # The SKU, accepted publisher text version, and excerpt reference must still match.
+    if not any(k.startswith('family:') for k,p in conditions) or not catalog_filters_match(row['code'],conditions):
+        return None
+    uses=[k for k,p in conditions if k.startswith('use:') and p=='positive']
+    if not uses or any(p!='positive' or not k.startswith(('family:','audience:','use:')) for k,p in conditions):
+        return None
+    for link in REGISTRY[row['code']].get('family_contexts',[]):
+        if not set(uses)<=set(link['uses']):continue
+        for claim in row['claims']:
+            if (claim['ref']==link['ref'] and claim['source_ref']==link['source_ref']
+                and claim['version_ref']==link['version_ref'] and claim['value']==link['value']
+                and claim['attribute']=='context' and claim['polarity']=='positive'
+                and claim['channel']=='manufacturer_authored_content' and not claim['restricted_bridge']):
+                return claim
+    return None
+
 def support_for(row, conditions):
     """Intersect exact claim groups by source, source version, and authority on this product."""
+    if not catalog_filters_match(row['code'], conditions):
+        return None
+    conditions = [c for c in conditions if not c[0].startswith(('audience:','family:'))]
+    if not conditions:
+        return None
     groups = defaultdict(dict)
     for claim in row["claims"]:
         attribute = claim["attribute"]
@@ -517,71 +905,137 @@ def support_for(row, conditions):
     return None
 
 def evaluate(conditions, admitted):
-    matches = [(row["code"], support_for(row, conditions)) for row in EVIDENCE.values()]
+    matches = [(row["code"], support_for(row, conditions) if any(k.startswith("note:") for k,p in conditions)
+                else catalog_family_support(row,conditions)) for row in EVIDENCE.values()]
     matches = [(code, proof) for code, proof in matches if proof]
     if not matches:
         if any(k.startswith("duration_hours:") for k, _ in conditions):
             return [], "لم أجد دليلًا يثبت مدة الثبات المطلوبة مع بقية شروطك، لذلك سحبتُ أي ترشيح سابق."
-        return [], "لم أجد في الأدلة المراجعة إصدارًا يوثّق كل ما طلبته. يمكنك بدء طلب جديد بشروط مختلفة."
-    if len(matches) > 1:
-        return [], "تطابق أكثر من رمز مع الوصف. ما النوتة الإضافية التي تفضّلها لأضيّق الاختيار؟"
-    code, proof = matches[0]
-    if code not in admitted:
-        return [], "تعذّر التحقق من سجل العطر في الكتالوج المتصل. أوقفت عرض الرمز."
+        return [], "لم أجد في الأدلة المراجعة إصدارًا يوثّق كل ما طلبته. يمكنك حذف شرط أو تغييره، أو فتح السجل للاطلاع على الأوصاف المتاحة."
+    recs=[]
     notes = [label(c) for c in conditions if c[0].startswith("note:")]
     contexts = [label(c) for c in conditions if c[0].startswith("use:")]
-    explanation = ("ورد في وصف المصنّع لهذا الإصدار " + " و".join(notes)
-                   + " ضمن الوصف العطري. ويذكر المصدر نفسه " + " و".join(contexts) + ".")
-    return [{"public_display_code": code, "title": "رمز العطر " + code, "reason": explanation}], explanation
+    filters = [label(c) for c in conditions if c[0].startswith(("audience:","family:"))]
+    for code, proof in sorted(matches):
+        if code not in admitted:
+            continue
+        explanation = ("ورد في وصف المصنّع لهذا الإصدار " + " و".join(notes)
+                       + " ضمن الوصف العطري. ويذكر المصدر نفسه " + " و".join(contexts) + ".")
+        if not notes:
+            explanation = ("يصنّف السجل المعتمد هذا الإصدار ضمن " + " و".join(label(c) for c in conditions if c[0].startswith('family:'))
+                           + ". ويذكر المصنّع في الصفحة الرسمية للإصدار " + LABELS[proof['value']] + ".")
+            filters=[label(c) for c in conditions if c[0].startswith('audience:')]
+        if filters:
+            explanation += " ويطابق تصنيف السجل طلبك (" + "، ".join(filters) + ")."
+        recs.append({"public_display_code": code,"title": "رمز العطر "+code,"reason": explanation})
+    if not recs:
+        return [], "تعذّر التحقق من سجل العطر في الكتالوج المتصل. أوقفت عرض الرمز."
+    return recs, recs[0]["reason"] if len(recs)==1 else "هذه الإصدارات تطابق الشروط الموثقة."
 
 def initial_state():
     return {"conditions": [], "active": [], "phase": "new", "revision": 0}
 
+def suggestions(conditions, phase, admitted):
+    if phase == 'new':
+        return ['رجالي','نسائي','أريد عطر']
+    if phase != 'collect':
+        return []
+    has_note = any(k.startswith(('note:','family:')) and p=='positive' for k,p in conditions)
+    wanted='use:' if has_note else 'note:'
+    keys=set()
+    for code,row in EVIDENCE.items():
+        if code not in admitted or not catalog_filters_match(code,conditions):
+            continue
+        for link in REGISTRY[code].get('family_contexts',[]):
+            for f in REGISTRY[code]['families']:
+                fk='family:'+f
+                for uk in link['uses']:
+                    if not catalog_family_support(row,[(fk,'positive'),(uk,'positive')]):continue
+                    if not all(p=='positive' and (k.startswith('audience:') or k in (fk,uk)) for k,p in conditions):continue
+                    if has_note and not any(k.startswith('use:') for k,p in conditions):keys.add(uk)
+                    elif not has_note:keys.add(fk)
+        groups=defaultdict(set)
+        for c in row['claims']:
+            if c['channel']=='manufacturer_authored_content' and c['polarity']=='positive':
+                groups[c['source_ref'],c['version_ref']].add(c['value'])
+        for facts in groups.values():
+            if not any(k.startswith('use:') for k in facts) or not any(k.startswith('note:') for k in facts):
+                continue
+            if not all(p=='positive' and k in facts for k,p in conditions if not k.startswith(('audience:','family:'))):
+                continue
+            keys.update(k for k in facts if k.startswith(wanted) and k in LABELS and (k,'positive') not in conditions)
+    if not keys:
+        return []
+    return [LABELS[k] for k in sorted(keys,key=lambda k:(k not in ('family:woody','note:grapefruit','note:mint','note:rose','use:day','use:evening'),LABELS[k]))][:7]
+
 def process(message, state, admitted):
-    old_codes = state["active"]
-    conditions = list(state["conditions"])
-    recs, question, msg = [], None, ""
+    old_codes = state['active']
+    conditions = list(state['conditions'])
     command = normalize(message)
+    recs, question, msg = [], None, ''
+    phase = state['phase']
+    blocked = False
     if command in RESET:
-        conditions, phase = [], "new"
-        question = "ما النوتة التي تحبها، ومتى تنوي استعمال العطر؟"
+        conditions, phase = [], 'new'
     elif command in CONFIRM:
-        phase = state["phase"]
-        if phase in ("confirm", "result"):
-            recs, msg = evaluate(conditions, admitted)
-            phase = "result"
+        if phase in ('confirm','result'):
+            recs,msg = evaluate(conditions,admitted)
+            phase='result'
         else:
-            question = "اكتب وصفك الشخصي والنوتة التي تفضّلها ووقت الاستخدام."
-    elif state["phase"] == "unresolved":
-        conditions, phase = [], "unresolved"
-        question = "بقي معنى من رسالتك غير محسوم. اختر «بداية جديدة» وأعد كتابة طلبك كاملًا."
+            question='أكمل الوصف أولًا. يمكنك الكتابة أو اختيار أحد الاقتراحات.'
     else:
-        parsed = parse_conditions(message)
-        if not parsed:
-            conditions, phase = [], "unresolved"
-            question = "لم أستطع تحديد جميع شروطك أو صاحب التفضيل. اختر «بداية جديدة» ثم صف تفضيلاتك بكلماتك."
-        else:
-            conditions = list(dict.fromkeys(conditions + parsed))
-            if any((key, "negative" if polarity == "positive" else "positive") in conditions
-                   for key, polarity in conditions):
-                conditions, phase = [], "unresolved"
-                question = "ورد تفضيل وتجنّب للنوتة نفسها. اختر «بداية جديدة» وحدد أيّهما تقصد."
-            elif not any(key.startswith("note:") and polarity == "positive" for key, polarity in conditions):
-                phase, question = "collect", "ما النوتة التي تحب أن تشمّها في العطر؟"
-            elif not any(key.startswith("use:") and polarity == "positive" for key, polarity in conditions):
-                phase, question = "collect", "ومتى أو أين تريد استعمال العطر؟"
-            elif any(key.startswith("duration_hours:") for key, _ in conditions) and not any(
-                    c["attribute"] == "performance" for row in EVIDENCE.values() for c in row["claims"]):
-                phase = "unsupported"
-                msg = "لا يتوفر في الأدلة المراجعة قياس يثبت مدة الثبات المطلوبة. لا أستطيع ترشيح رمز بهذه الشروط."
+        if phase=='unresolved' and not command.startswith('استبدل رسالتي:'):
+            blocked=True
+        elif command.startswith('احذف '):
+            target=command[5:].strip()
+            kept=[c for c in conditions if normalize(label(c))!=target]
+            if len(kept)==len(conditions) or phase=='unresolved':
+                blocked=True
             else:
-                phase = "confirm"
-                question = "هل أعتمد هذا الوصف للبحث في الكتالوج؟"
-    codes = [item["public_display_code"] for item in recs]
-    state.update(conditions=conditions, active=codes, phase=phase, revision=state["revision"] + 1)
-    return {"recommendations": recs, "clarification_question": question, "message": msg,
-            "invalidation_triggered": bool(old_codes and old_codes != codes),
-            "phase": phase, "criteria": [label(c) for c in conditions], "revision": state["revision"]}
+                conditions=kept
+        elif command in GENERAL and phase != 'unresolved':
+            pass
+        else:
+            revised=message.split(':',1)[1] if phase=='unresolved' and command.startswith('استبدل رسالتي:') else message
+            parsed=parse_conditions(revised)
+            if parsed:
+                conditions=list(dict.fromkeys(conditions+parsed))
+            else:
+                blocked=True
+        conflicts=any((k,'negative' if pol=='positive' else 'positive') in conditions for k,pol in conditions)
+        audiences={k for k,pol in conditions if k.startswith('audience:') and pol=='positive'}
+        if blocked:
+            phase='unresolved'
+            question='بقي جزء من رسالتك غير واضح. أعد صياغة آخر رسالة كاملة في الحقل أدناه؛ ستبقى الشروط السابقة المعروضة محفوظة.'
+        elif conflicts or len(audiences)>1:
+            phase='edit'
+            question='لديك شرطان متعارضان. احذف الشرط الذي تريد تغييره ثم أكمل طلبك.'
+        elif not conditions:
+            phase='collect'
+            question='أي رائحة أو طابع تفضّل؟ اختر من الاقتراحات أو اكتب ما تحب.'
+        elif not any(k.startswith(('note:','family:')) and pol=='positive' for k,pol in conditions):
+            phase='collect'
+            question='أي رائحة تحبّها في العطر؟ اختر نوتة أو طابعًا عطريًا، أو اكتب تفضيلك.'
+        elif not any(k.startswith('use:') and pol=='positive' for k,pol in conditions):
+            phase='collect'
+            question='ومتى أو أين تريد استعمال العطر؟'
+        elif any(k.startswith('duration_hours:') for k,_ in conditions) and not any(
+                c['attribute']=='performance' for r in EVIDENCE.values() for c in r['claims']):
+            phase='unsupported'
+            msg='لا يتوفر في الأدلة المراجعة قياس يثبت مدة الثبات المطلوبة. لا أستطيع ترشيح رمز بهذه الشروط.'
+        else:
+            phase,question='confirm','هل أعتمد هذا الوصف للبحث في الكتالوج؟'
+    codes=[r['public_display_code'] for r in recs]
+    state.update(conditions=conditions,active=codes,phase=phase,revision=state['revision']+1)
+    choices=suggestions(conditions,phase,admitted)
+    if phase=='collect' and not choices and any(k.startswith(('audience:','family:')) for k,p in conditions):
+        question='لم أجد ضمن اختيارات التوصية الموثقة مسارًا يجمع هذا التصنيف مع شروطك الحالية. يمكنك تصفّح السجلات المطابقة أو تعديل شرط من طلبك.'
+    return {'recommendations':recs,'clarification_question':question,'message':msg,'phase':phase,
+            'criteria':[label(c) for c in conditions],'revision':state['revision'],
+            'invalidation_triggered':bool(old_codes and old_codes!=codes),
+            'choices':choices,
+            'audience':next((k.split(':')[1] for k,p in conditions if k.startswith('audience:') and p=='positive'),''),
+            'family':next((k.split(':')[1] for k,p in conditions if k.startswith('family:') and p=='positive'),'')}
 
 
 class QueryRequest(BaseModel):
@@ -650,48 +1104,71 @@ button.secondary{background:transparent;color:#294936}
 .actions{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
 :focus-visible{outline:3px solid #706632;outline-offset:3px}
 """
+CSS += """
+main.wide{width:min(100%,62rem)}header{margin-bottom:1.4rem}header nav{display:flex;gap:.7rem 1.2rem;flex-wrap:wrap}
+a{color:#26533e;text-underline-offset:.22em}h1{font-size:clamp(1.6rem,5vw,2.3rem);margin:.5rem 0 1rem}
+.records{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.65rem}
+.record{display:flex;flex-direction:column;padding:.75rem 1rem;background:#fffdf6;border:1px solid #bdc9b9;border-radius:.55rem;text-decoration:none;color:#223c30}
+.record bdi{font-size:1.35rem;font-variant-numeric:tabular-nums;align-self:start}.record span{font-size:.85rem;color:#43564a}
+.record:hover,.record:focus-visible{background:#e7eee1}.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.6rem;align-items:end;margin:1rem 0}
+.filters label{margin:0}.filters input,select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-height:44px;border:1px solid #829488;border-radius:.5rem;background:#fffef8;color:inherit;font:inherit;padding:.32rem .5rem}
+.actions.choices{align-items:stretch}.choices button{background:#eff3e9;color:#294936;border-color:#b3c4af;text-align:start}
+.facts{display:flex;flex-wrap:wrap;gap:.85rem 2rem;padding:1rem 0;border-block:1px solid #c5cebd}
+dt{color:#4c6152;font-size:.86rem}dd{margin:0;font-weight:bold}.lede{color:#445a4b}.scope{margin:.6rem 0 1.15rem}
+details{margin:.7rem 0}summary{cursor:pointer;text-decoration:underline}.confirm{margin:.85rem 0}
+"""
 def render_page(session_id, result=None, error=None):
     esc = html.escape
-    result = result or {"revision": 0, "phase": "new", "criteria": [], "recommendations": []}
+    result = result or {"revision":0,"phase":"new","criteria":[],"recommendations":[],"choices":suggestions([], "new", ())}
     bits = []
     if error:
         bits.append('<p role="alert">' + esc(error) + '</p><a class="button" href="/">ابدأ محادثة جديدة</a>')
+        return page_shell('مستشارك العطري',''.join(bits))
+    if result.get('invalidation_triggered'):
+        bits.append('<p role="status">سُحب الترشيح السابق بعد تعديل طلبك.</p>')
+    if result['criteria']:
+        bits.append('<section aria-label="الشروط"><h2>ما فهمته من طلبك</h2><ul>')
+        bits.extend('<li>'+esc(c)+'</li>' for c in result['criteria'])
+        bits.append('</ul></section>')
+    if result['recommendations']:
+        bits.append('<section class="panel result" data-recommendations><h2>العطر المقترح</h2>')
+        for item in result['recommendations']:
+            code=item['public_display_code']
+            bits.append('<p>رمز العطر <a href="/catalog/'+code+'"><bdi dir="ltr">'+code+'</bdi></a></p><p>'+esc(item['reason'])+'</p>')
+        bits.append('</section>')
     else:
-        if result.get("invalidation_triggered"):
-            bits.append('<p role="status">سُحب الترشيح السابق بعد تعديل طلبك.</p>')
-        if result["criteria"]:
-            bits.append('<section aria-label="الشروط"><h2>ما فهمته من طلبك</h2><ul>')
-            bits.extend('<li>' + esc(item) + '</li>' for item in result["criteria"])
-            bits.append('</ul></section>')
-        recs = result["recommendations"]
-        if recs:
-            bits.append('<section class="panel result" data-recommendations><h2>العطر المقترح</h2>')
-            for item in recs:
-                bits.append('<p>رمز العطر <bdi dir="ltr">' + esc(item["public_display_code"]) + '</bdi></p>')
-                bits.append('<p>' + esc(item["reason"]) + '</p>')
-            bits.append('</section>')
-        else:
-            body = result.get("clarification_question") or result.get("message") or "ما النوتة التي تحبّها، ومتى تريد استعمال العطر؟"
-            bits.append('<p class="panel" role="status">' + esc(body) + '</p>')
-        bits.append('<form action="/chat" method="post" autocomplete="off">')
-        bits.append(f'<input type="hidden" name="session_id" value="{esc(session_id,quote=True)}">')
-        bits.append(f'<input type="hidden" name="revision" value="{int(result["revision"])}">')
-        if result["phase"] == "confirm":
-            bits.append('<div class="actions"><button name="command" value="تأكيد" formnovalidate>تأكيد التفضيلات</button></div>')
-        if result["phase"] != "unresolved":
-            bits.append('<label for="message">رسالتك</label><textarea name="message" id="message" rows="2" maxlength="1200" placeholder="اكتب تفضيلاتك هنا"></textarea>')
-        bits.append('<div class="actions">')
-        if result["phase"] != "unresolved":
-            bits.append('<button type="submit">إرسال</button>')
-        if result["phase"] != "new":
-            bits.append('<button class="secondary" name="command" value="بداية جديدة" formnovalidate>بداية جديدة</button>')
-        bits.append('</div></form>')
-    page = ('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
-            '<meta name="viewport" content="width=device-width,initial-scale=1"><title>ANAS | مستشارك العطري</title>'
-            '<style>' + CSS + '</style></head><body><main><header><h1>مستشارك العطري</h1>'
-            '<span lang="en" dir="ltr" class="wordmark">ANAS</span></header>' + ''.join(bits) + '</main></body></html>')
-    return HTMLResponse(page, headers={"Cache-Control":"no-store", "Referrer-Policy":"no-referrer",
-       "Content-Security-Policy":"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"})
+        body=result.get('clarification_question') or result.get('message') or 'لمن تبحث عن عطر؟ صف ما تحبه وأين تريد استعماله، أو اختر نقطة بداية.'
+        bits.append('<p class="panel" role="status">'+esc(body)+'</p>')
+    aud,fam=result.get('audience',''),result.get('family','')
+    if aud or fam:
+        available=sum((not aud or row['audience']==aud) and (not fam or fam in row['families']) for row in REGISTRY.values())
+        scope=' · '.join(filter(None,[AUDIENCES.get(aud),FAMILY_AR.get(fam)]))
+        bits.append('<p class="scope"><a href="'+esc(catalog_url(aud,fam),quote=True)+'">عرض سجلات '+esc(scope)+' ('+str(available)+')</a></p>')
+        if (result['phase']=='collect' and len(result['criteria'])==1 and available>0):
+            subset=[code for code,m in sorted(REGISTRY.items()) if (not aud or m['audience']==aud) and (not fam or fam in m['families'])]
+            bits.append('<details><summary>معاينة سجلات من هذا التصنيف</summary><div class="records">'+''.join(record_card(c) for c in subset[:4])+'</div></details>')
+    bits.append('<form action="/chat" method="post" autocomplete="off">')
+    bits.append('<input type="hidden" name="session_id" value="'+esc(session_id,quote=True)+'">')
+    bits.append('<input type="hidden" name="revision" value="'+str(result['revision'])+'">')
+    phase=result['phase']
+    if phase=='confirm':
+        bits.append('<button class="confirm" name="command" value="تأكيد" formnovalidate>تأكيد التفضيلات</button>')
+    choices=result.get('choices',[])
+    if choices:
+        bits.append('<div class="choices actions" aria-label="اختيارات للمتابعة">')
+        bits.extend('<button name="choice" value="'+esc(v,quote=True)+'" formnovalidate>'+esc('ساعدني أختار' if v=='أريد عطر' else v)+'</button>' for v in choices)
+        bits.append('</div>')
+    bits.append('<label for="message">رسالتك</label><textarea name="message" id="message" rows="2" maxlength="1200" placeholder="مثلاً، أريد عطر رجالي"></textarea><div class="actions">')
+    bits.append('<button type="submit"'+(' name="command" value="صياغة"' if phase=='unresolved' else '')+'>'+('استبدال الرسالة غير المفهومة' if phase=='unresolved' else 'إرسال')+'</button>')
+    if phase!='new':
+        bits.append('<button class="secondary" name="command" value="بداية جديدة" formnovalidate>بداية جديدة</button>')
+    bits.append('</div>')
+    if result['criteria'] and phase!='unresolved':
+        bits.append('<details><summary>تعديل الشروط</summary><div class="actions choices">')
+        bits.extend('<button name="remove" value="'+esc(c,quote=True)+'">حذف '+esc(c)+'</button>' for c in result['criteria'])
+        bits.append('</div></details>')
+    bits.append('</form>')
+    return page_shell('مستشارك العطري',''.join(bits))
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def chat_page():
@@ -717,10 +1194,18 @@ async def submit_form(request: Request):
         sid, rev = fields["session_id"][0], int(fields["revision"][0])
         draft = fields.get("message", [""])[0].strip()
         cmd = fields.get("command", [""])[0]
-        if cmd and cmd not in ("تأكيد", "بداية جديدة"):
+        choice = fields.get("choice", [""])[0]
+        remove = fields.get("remove", [""])[0]
+        if cmd not in ("", "تأكيد", "بداية جديدة", "صياغة") or sum(bool(x) for x in (choice,remove,cmd))>1:
             raise ValueError
         # Edits typed under a pending proposal take precedence over its old confirmation.
-        message = draft if cmd == "تأكيد" and draft else cmd or draft
+        if cmd == "صياغة":
+            if not draft: raise HTTPException(422)
+            message="استبدل رسالتي:"+draft
+        elif remove:
+            message="احذف "+remove
+        else:
+            message=draft if draft and cmd!="بداية جديدة" else cmd or choice or draft
         result = turn(("form", sid), message, rev)
         return render_page(sid, result)
     except (UnicodeError, ValueError, KeyError) as err:
@@ -732,6 +1217,101 @@ async def submit_form(request: Request):
         response.status_code = err.status_code
         return response
 
-if __name__ == "__main__":
+
+
+def page_shell(title, content, *, wide=False, status=200):
+    heading=html.escape(title)
+    page = ('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1"><title>'+heading+' | ANAS</title>'
+            '<style>'+CSS+'</style></head><body><main'+(' class="wide"' if wide else '')+'>'
+            '<header><span class="wordmark" lang="en" dir="ltr">ANAS</span><nav aria-label="التنقل الرئيسي">'
+            '<a href="/">المستشار العطري</a><a href="/catalog">سجل الكتالوج</a></nav></header>'
+            '<h1>'+heading+'</h1>'+content+'</main></body></html>')
+    return HTMLResponse(page,status_code=status,headers={'Cache-Control':'no-store','Referrer-Policy':'no-referrer',
+       'Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"})
+
+def catalog_url(audience='', family=''):
+    query=urllib.parse.urlencode({k:v for k,v in [('audience',audience),('family',family)] if v})
+    return '/catalog'+('?' + query if query else '')
+
+def note_label(value):
+    if value.startswith('note:material_'):
+        return 'مكوّن عطري ذو تسمية خاصة'
+    return LABELS.get(value) or NOTE_AR.get(value.removeprefix('note:'))
+
+def evidence_label(c):
+    return LABELS.get(c['value']) if c['attribute']=='context' else note_label(c['value'])
+
+def record_card(code):
+    row=EVIDENCE[code];meta=REGISTRY[code]
+    tags=[CONCENTRATIONS[row['concentration']]]
+    if meta['audience']:tags.append(AUDIENCES[meta['audience']])
+    tags += [FAMILY_AR.get(f,f) for f in meta['families'][:2]]
+    return ('<a class="record" href="/catalog/'+code+'"><bdi dir="ltr">'+code+'</bdi><span>'
+            +html.escape(' · '.join(tags))+'</span></a>')
+
+def filter_select(field, label_text, options, selected):
+    opts=['<option value="">الكل</option>']
+    for value,display in options:
+        opts.append('<option value="'+html.escape(value,quote=True)+'"'+(' selected' if value==selected else '')+'>'
+                    +html.escape(display)+'</option>')
+    return '<label>'+label_text+'<select name="'+field+'">'+''.join(opts)+'</select></label>'
+
+@app.get('/catalog',response_class=HTMLResponse,include_in_schema=False)
+def catalog_page(q: str='', audience: str='', family: str=''):
+    raw=q.strip()[:120]
+    term=normalize(raw)
+    if term.isascii() and term.isdigit() and len(term)<=4:term=term.zfill(4)
+    rows=[]
+    for code,row in sorted(EVIDENCE.items()):
+        meta=REGISTRY[code]
+        if audience and (meta['audience'] or 'unknown')!=audience:continue
+        if family and family not in meta['families']:continue
+        if term:
+            if term.isdigit():
+                if term!=code:continue
+            else:
+                words=[CONCENTRATIONS[row['concentration']],AUDIENCES.get(meta['audience'],''),*[FAMILY_AR.get(f,f) for f in meta['families']]]
+                words+= [evidence_label(c) for c in row['claims']]
+                if not any(term in normalize(w) for w in words if w):continue
+        rows.append(code)
+    bits=['<p class="lede">125 رمزًا معتمدًا بين <span dir="ltr">0001</span> و<span dir="ltr">0164</span>. اختر رمزًا لعرض سجله.</p>',
+          '<form class="filters" action="/catalog" method="get"><label>بحث بالرمز أو الوصف<input name="q" maxlength="120" value="'+html.escape(raw,quote=True)+'" placeholder="مثلاً 0145 أو زعفران"></label>',
+          filter_select('audience','التصنيف الموثق',list(AUDIENCES.items())+[('unknown','غير محدد')],audience),
+          filter_select('family','العائلة العطرية',sorted(FAMILY_AR.items(),key=lambda kv:kv[1]),family),
+          '<button type="submit">بحث</button></form>']
+    if term or audience or family:
+        bits.append('<div class="actions"><strong>'+str(len(rows))+' من 125</strong><a href="/catalog">عرض جميع الرموز</a></div>')
+    if rows:bits.append('<section class="records" aria-label="سجلات العطور">'+''.join(record_card(c) for c in rows)+'</section>')
+    else:bits.append('<p class="panel" role="status">لم أجد سجلًا بهذه المواصفات. غيّر البحث أو اعرض جميع الرموز.</p>')
+    return page_shell('سجل الكتالوج',''.join(bits),wide=True)
+
+@app.get('/catalog/{code}',response_class=HTMLResponse,include_in_schema=False)
+def catalog_detail(code: str):
+    if code not in EVIDENCE:
+        return page_shell('السجل غير موجود','<p>هذا الرمز خارج القائمة المعتمدة.</p><a href="/catalog">العودة إلى سجل الكتالوج</a>',status=404)
+    r=EVIDENCE[code];m=REGISTRY[code]
+    families='، '.join(FAMILY_AR.get(f,f) for f in m['families']) or 'غير موثّقة في السجل'
+    audience=(AUDIENCES[m['audience']]+' بحسب التسمية الرسمية للإصدار') if m['audience'] else 'غير محدد في التسمية المعتمدة'
+    bits=['<p><a href="/catalog">جميع الرموز</a></p><dl class="facts">']
+    for key,val in [('التركيز',CONCENTRATIONS[r['concentration']]),('التصنيف',audience),('العائلة العطرية',families)]:
+        bits.append('<div><dt>'+key+'</dt><dd>'+html.escape(val)+'</dd></div>')
+    bits.append('</dl>')
+    for kind,title in [(False,'النوتات والأكوردات'),(True,'الاستخدام الموثّق')]:
+        groups=defaultdict(list)
+        for claim in r['claims']:
+            if (claim['attribute']=='context')!=kind:continue
+            val=evidence_label(claim)
+            if val and val not in groups[claim['channel']]:groups[claim['channel']].append(val)
+        bits.append('<section class="panel"><h2>'+title+'</h2>')
+        for channel,values in groups.items():
+            bits.append('<p><strong>'+CHANNELS[channel]+'</strong><br>'+html.escape('، '.join(values))+'</p>')
+        if not groups:
+            archival=r['classification'] in (('attributed_use_only','both_documentary_axes') if kind else ('taste_only','both_documentary_axes'))
+            bits.append('<p>'+('توجد مادة وصفية محفوظة؛ لم تُعتمد منها شروط تفصيلية قابلة للمطابقة هنا.' if archival else 'لا يتوفر وصف موثّق لهذا البند في السجل المعروض.')+'</p>')
+        bits.append('</section>')
+    return page_shell('سجل العطر '+code,''.join(bits))
+
+if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
+    uvicorn.run(app,host='0.0.0.0',port=int(os.getenv('PORT','8000')))
