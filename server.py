@@ -5,10 +5,15 @@ import uvicorn
 import os
 import json
 import urllib.request
+import urllib.error
+from urllib.parse import urlsplit
+import ssl
+import socket
 import time
 from contextlib import asynccontextmanager
 
-QDRANT_URL = os.environ.get("QDRANT_URL", "https://e1b44e0a-3fd9-48b2-b529-a9dcd260c23a.ca-central-1-0.aws.cloud.qdrant.io")
+DEFAULT_QDRANT_URL = "https://e1b44e0a-3fd9-48b2-b529-a9dcd260c23a.ca-central-1-0.aws.cloud.qdrant.io"
+QDRANT_URL = os.environ.get("QDRANT_URL", DEFAULT_QDRANT_URL)
 QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY", "")
 
 COLLECTION_NAME = "anas_perfume_catalog_v1_1_multilingual_e5_small_384"
@@ -19,7 +24,41 @@ HEADERS = {
 
 CATALOG_CACHE = []
 
+def catalog_error(exc):
+    if isinstance(exc, urllib.error.HTTPError):
+        return f"http_{exc.code}"
+    cause = exc.reason if isinstance(exc, urllib.error.URLError) else exc
+    if isinstance(cause, ssl.SSLError):
+        return "tls_error"
+    if isinstance(cause, socket.gaierror):
+        return "dns_error"
+    if isinstance(cause, TimeoutError):
+        return "timeout"
+    if isinstance(cause, OSError):
+        return "connection_error"
+    if isinstance(exc, (ValueError, TypeError, AttributeError, KeyError)):
+        return "invalid_request_or_response"
+    return "unclassified_error"
+
+
 def fetch_all_perfumes():
+    try:
+        origin = urlsplit(QDRANT_URL)
+        configured_origin = (origin.scheme.lower(), origin.hostname, origin.port or 443)
+        default_origin = ("https", urlsplit(DEFAULT_QDRANT_URL).hostname, 443)
+        matches_default_origin = configured_origin == default_origin
+        has_base_path = origin.path not in ("", "/")
+    except ValueError:
+        matches_default_origin = False
+        has_base_path = None
+    settings = {
+        "url_source": "environment" if "QDRANT_URL" in os.environ else "default",
+        "matches_default_origin": matches_default_origin,
+        "has_base_path": has_base_path,
+        "key_present": bool(QDRANT_API_KEY.strip()),
+        "collection": COLLECTION_NAME,
+    }
+    print("ANAS_QDRANT_CONFIG", json.dumps(settings), flush=True)
     all_points = []
     offset = None
     while True:
@@ -45,11 +84,17 @@ def fetch_all_perfumes():
                     method="POST"
                 )
                 with urllib.request.urlopen(req, timeout=30) as res:
-                    result = json.loads(res.read().decode("utf-8")).get("result", {})
-                    points = result.get("points", [])
+                    result = json.loads(res.read().decode("utf-8"))["result"]
+                    points = result["points"]
+                    if not isinstance(points, list):
+                        raise ValueError("invalid points format")
+                    if not all_points:
+                        print(f"ANAS_QDRANT_READ http={res.status} first_page_points={len(points)}", flush=True)
                     success = True
-            except Exception:
+            except Exception as exc:
                 retries -= 1
+                if retries == 0:
+                    print(f"ANAS_QDRANT_READ failure={catalog_error(exc)} loaded_points={len(all_points)}", flush=True)
                 time.sleep(1)
                 
         if not success or not points:
@@ -67,7 +112,7 @@ async def lifespan(app: FastAPI):
     global CATALOG_CACHE
     print("🔄 جاري تحميل الكتالوج إلى ذاكرة الخادم السحابي...")
     CATALOG_CACHE = fetch_all_perfumes()
-    print(f"✅ تم تحميل إجمالي {len(CATALOG_CACHE)} عطر بنجاح.")
+    print(f"ANAS_CATALOG loaded_points={len(CATALOG_CACHE)}", flush=True)
     yield
 
 app = FastAPI(
